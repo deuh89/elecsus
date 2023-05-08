@@ -62,6 +62,10 @@ class Hamiltonian(object):
             atom = K41
         elif Isotope=='Na':
             atom = Na
+        elif Isotope=='Li6':
+            atom = Li6
+        elif Isotope=='Li7':
+            atom = Li7
         elif Isotope=='IdealAtom':
             atom = IdealAtom
             transition = IdealD1Transition
@@ -111,6 +115,18 @@ class Hamiltonian(object):
         elif (Trans=='D2') and (Isotope=='K41'):
             transition = KD2Transition
             atom_transition = K41_D2
+        elif (Trans=='D1') and (Isotope=='Li6'):
+            transition = LiD1Transition
+            atom_transition = Li6_D1
+        elif (Trans=='D2') and (Isotope=='Li6'):
+            transition = LiD2Transition
+            atom_transition = Li6_D2
+        elif (Trans=='D1') and (Isotope=='Li7'):
+            transition = LiD1Transition
+            atom_transition = Li7_D1
+        elif (Trans=='D2') and (Isotope=='Li7'):
+            transition = LiD2Transition
+            atom_transition = Li7_D2
 			
         if Bfield == 0.0:
             Bfield += 1e-5 # avoid degeneracy problem..?

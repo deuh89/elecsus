@@ -58,7 +58,7 @@ p_dict_defaults = {	'Elem':'Rb', 'Dline':'D2',
 							# B-field angle w.r.t. light k-vector
 							'Btheta':0, 'Bphi':0,
 							'Constrain':True, 'DoppTemp':20.,
-							'rb85frac':72.17, 'K40frac':0.01, 'K41frac':6.73,
+							'rb85frac':72.17, 'K40frac':0.01, 'K41frac':6.73, 'Li6frac':7.59,
 							'BoltzmannFactor':True}
 
 def FreqStren(groundLevels,excitedLevels,groundDim,
@@ -249,6 +249,10 @@ def calc_chi(X, p_dict,verbose=False):
 		K41frac = p_dict['K41frac']
 	else:
 		K41frac = p_dict_defaults['K41frac']
+	if 'Li6frac' in list(p_dict.keys()):
+		Li6frac = p_dict['Li6frac']
+	else:
+		Li6frac = p_dict_defaults['Li6frac']
 	if 'BoltzmannFactor' in list(p_dict.keys()):
 		BoltzmannFactor =  p_dict['BoltzmannFactor']
 	else:
@@ -263,6 +267,7 @@ def calc_chi(X, p_dict,verbose=False):
 	rb85frac = rb85frac/100.0
 	K40frac  = K40frac/100.0
 	K41frac  = K41frac/100.0
+	Li6frac = Li6frac/100.0
 
 	if Bfield==0.0:
 		Bfield = 0.0001 #To avoid degeneracy problem at B = 0.
@@ -385,6 +390,75 @@ def calc_chi(X, p_dict,verbose=False):
 			transitionConst = AC.NaD2Transition
 		AllEnergyLevels = concatenate((lenergy,renergy,zenergy))
 
+	# Lithium energy levels
+	if Elem=='Li':
+		Li7frac=1.0-Li6frac  # lithium-6 fraction
+		if Li6frac!=0.0: #Save time if no rubidium-85 required
+			Li6atom = AC.Li6
+			#Hamiltonian(isotope,transition,gL,Bfield)
+			Li6_ES = ES.Hamiltonian('Li6',Dline,1.0,Bfield)
+
+			# li-6 allowed transitions for light driving sigma minus
+			lenergy6, lstrength6, ltransno6 = FreqStren(
+													Li6_ES.groundManifold,
+													Li6_ES.excitedManifold,
+													Li6_ES.ds,Li6_ES.dp,
+													Dline,'Left',BoltzmannFactor,T+273.16)
+
+			# li-6 allowed transitions for light driving sigma plus
+			renergy6, rstrength6, rtransno6 = FreqStren(
+													Li6_ES.groundManifold,
+													Li6_ES.excitedManifold,
+													Li6_ES.ds,Li6_ES.dp,
+													Dline,'Right',BoltzmannFactor,T+273.16)
+
+			# li-6 allowed transitions for light driving pi
+			zenergy6, zstrength6, ztransno6 = FreqStren(
+													Li6_ES.groundManifold,
+													Li6_ES.excitedManifold,
+													Li6_ES.ds,Li6_ES.dp,
+													Dline,'Z',BoltzmannFactor,T+273.16)
+
+		if Li7frac!=0.0:
+			Li7atom = AC.Li7
+			#Hamiltonian(isotope,transition,gL,Bfield)
+			Li7_ES = ES.Hamiltonian('Li7',Dline,1.0,Bfield)
+			# Rb-87 allowed transitions for light driving sigma minus
+			lenergy7, lstrength7, ltransno7 = FreqStren(
+													Li7_ES.groundManifold,
+													Li7_ES.excitedManifold,
+													Li7_ES.ds,Li7_ES.dp,
+													Dline,'Left',BoltzmannFactor,T+273.16)
+
+			# Rb-87 allowed transitions for light driving sigma plus
+			renergy7, rstrength7, rtransno7 = FreqStren(
+													Li7_ES.groundManifold,
+													Li7_ES.excitedManifold,
+													Li7_ES.ds,Li7_ES.dp,
+													Dline,'Right',BoltzmannFactor,T+273.16)
+
+			# Rb-87 allowed transitions for light driving sigma plus
+			zenergy7, zstrength7, ztransno7 = FreqStren(
+													Li7_ES.groundManifold,
+													Li7_ES.excitedManifold,
+													Li7_ES.ds,Li7_ES.dp,
+													Dline,'Z',BoltzmannFactor,T+273.16)
+
+		if Dline=='D1':
+			transitionConst = AC.LiD1Transition
+		elif Dline=='D2':
+			transitionConst = AC.LiD2Transition
+
+		if (Li6frac!=0.0) and (Li7frac!=0.0):
+			AllEnergyLevels = concatenate((lenergy7,lenergy6,
+														renergy7,renergy6,
+														zenergy7,zenergy6))
+		elif (Li6frac!=0.0) and (Li7frac==0.0):
+			AllEnergyLevels = concatenate((lenergy6,renergy6,zenergy6))
+		elif (Li6frac==0.0) and (Li7frac!=0.0):
+			AllEnergyLevels = concatenate((lenergy7,renergy7,zenergy7))
+
+
 	#Potassium energy levels <<<<< NEED TO ADD Z-COMPONENT >>>>>
 	elif Elem=='K':
 		K39frac=1.0-K40frac-K41frac #Potassium-39 fraction
@@ -478,6 +552,8 @@ def calc_chi(X, p_dict,verbose=False):
 		NDensity=numDenK(T)
 	elif Elem=='Na':
 		NDensity=numDenNa(T)
+	elif Elem=='Li':
+		NDensity=numDenLi(T)
 
 	#Calculate lorentzian broadening and shifts
 	gamma0 = 2.0*pi*transitionConst.NatGamma*1.e6
@@ -522,7 +598,33 @@ def calc_chi(X, p_dict,verbose=False):
 		ChiImLeft = prefactor*(rb85frac*lab85+rb87frac*lab87)
 		ChiImRight = prefactor*(rb85frac*rab85+rb87frac*rab87)
 		ChiImZ = prefactor*(rb85frac*zab85 + rb87frac*zab87)
-		
+
+	if Elem=='Li':
+		lab6, ldisp6, rab6, rdisp6, zab6, zdisp6 = 0,0,0,0,0,0
+		lab7, ldisp7, rab7, rdisp7, zab7, zdisp7 = 0,0,0,0,0,0
+		if Li6frac!=0.0:
+			lab6, ldisp6, rab6, rdisp6, zab6, zdisp6 = add_voigt(d,DoppTemp,
+													   Li6atom.mass,
+													   wavenumber,gamma,
+													   voigtwidth,
+													   ltransno6,lenergy6,lstrength6,
+													   rtransno6,renergy6,rstrength6,
+													   ztransno6,zenergy6,zstrength6)
+		if Li7frac!=0.0:
+			lab7, ldisp7, rab7, rdisp7, zab7, zdisp7 = add_voigt(d,DoppTemp,
+													   Li7atom.mass,
+													   wavenumber,gamma,
+													   voigtwidth,
+													   ltransno7,lenergy7,lstrength7,
+													   rtransno7,renergy7,rstrength7,
+													   ztransno7,zenergy7,zstrength7)
+		# Make the parts of the susceptibility
+		ChiRealLeft= prefactor*(Li6frac*ldisp6+Li7frac*ldisp7)
+		ChiRealRight= prefactor*(Li6frac*rdisp6+Li7frac*rdisp7)
+		ChiRealZ = prefactor*(Li6frac*zdisp6 + Li7frac*zdisp7)
+		ChiImLeft = prefactor*(Li6frac*lab6+Li7frac*lab7)
+		ChiImRight = prefactor*(Li6frac*rab6+Li7frac*rab7)
+		ChiImZ = prefactor*(Li6frac*zab6 + Li7frac*zab7)
 
 	elif Elem=='Cs':
 		lab, ldisp, rab, rdisp, zab, zdisp = 0,0,0,0,0,0

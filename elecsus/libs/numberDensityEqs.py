@@ -49,6 +49,8 @@ def CalcNumberDensity(T,atom):
 		return numDenK(T)
 	elif atom=='Na':
 		return numDenNa(T)
+	elif atom in ['Li6', 'Li7', 'Li']:
+		return numDenLi(T)
 
 
 def numDenRb(T):
@@ -84,5 +86,14 @@ def numDenNa(T):
         p=10.0**(5.298-5603./T)
     else:
         p=10.0**(8.400-5634./T-1.1748*log10(T))
+    NumberDensity=101325.0*p/(kB*T)
+    return NumberDensity
+
+def numDenLi(T):
+    """Calculates the lithium number density"""
+    if T<453.69:
+        p=10.0**(-54.87864-6450.94/T - 0.01487480*T + 24.82251*log10(T))
+    else:
+        p=10.0**(10.3454 - 8345.574/T - 0.00008840*T - 0.68106*log10(T))
     NumberDensity=101325.0*p/(kB*T)
     return NumberDensity

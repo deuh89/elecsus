@@ -92,6 +92,21 @@ class Na:
     mass = 22.9897692807*amu
     FS = 508.8487162e6 - 508.3331958e6 # Fine-structure splitting (MHz)
 	
+class Li6:
+    """Constants relating to the lithium-6 atom"""
+    I  = 1.0
+    As = 152.1368407 #Ground state hyperfine constant in units of MHz
+    gI = -0.0004476540 #nuclear spin g-factor
+    mass = 6.0151214*amu
+    FS = 446.799650653e6 - 446.789597791e6 # Fine-structure splitting (MHz)
+
+class Li7:
+    """Constants relating to the lithium-7 atom"""
+    I  = 1.5
+    As = 93.09552 #Ground state hyperfine constant in units of MHz
+    gI = -0.001182213 #nuclear spin g-factor
+    mass = 7.01600343*amu
+    FS = 446.810184005e6 - 446.800132006e6 # Fine-structure splitting (MHz)
 
 # Element-Transition constants
 
@@ -159,6 +174,23 @@ class NaD2Transition:
     dipoleStrength=3.0*sqrt(e0*hbar*(2.0*NatGamma*(10.0**6))*(wavelength**3)/(8.0*pi))
     v0=508.8487162e12 #Sodium D1 linecentre in Hz
 
+class LiD1Transition:
+    """Constants relating to the lithium D1 transition"""
+    wavelength=670.99247494e-9*0.0759+670.97665494e-9*0.9241 #The weighted linecentre of the lithium D1 line in m
+    wavevectorMagnitude=2.0*pi/wavelength #Magnitude of the wavevector
+    NatGamma=5.8724 #lithium D1 natural linewidth in MHz
+    dipoleStrength=3.0*sqrt(e0*hbar*(2.0*NatGamma*(10.0**6))*(wavelength**3)/(8.0*pi))
+    v0=377107407.299e6 #The weighted linecentre of the rubidium D1 line in Hz
+
+class LiD2Transition:
+    """Constants relating to the lithium D2 transition"""
+    wavelength=670.97734875e-9*0.0759+670.96155981e-9*0.9241
+    wavevectorMagnitude=2.0*pi/wavelength
+    NatGamma=5.8724
+    dipoleStrength=3.0*sqrt(e0*hbar*(2.0*NatGamma*(10.0**6))*(wavelength**3)/(8.0*pi))
+    v0=384230426.6e6
+
+
 
 class IdealD1Transition:
     """Constants relating to the rubidium D1 transition"""
@@ -174,6 +206,7 @@ transitions = {'RbD1':RbD1Transition, 'RbD2':RbD2Transition,
 						'CsD1':CsD1Transition, 'CsD2':CsD2Transition,
 						'KD1':KD1Transition, 'KD2':KD2Transition,
 						'NaD1':NaD1Transition, 'NaD2':NaD2Transition,
+						'LiD1':LiD1Transition, 'LiD2':LiD2Transition,
 						'IdealD1':IdealD1Transition
 					}
 					
@@ -281,3 +314,32 @@ class Na_D2:
     Ap = 18.534
     Bp = 2.724
     IsotopeShift = 0.0 #Only one isotope.
+
+class Li6_D1:
+    """Constants relating to lithium-6 and the D1 transition"""
+    #Hyperfine constants in units of MHz
+    Ap = 17.386
+    Bp = 0.0
+    IsotopeShift = 10534.26 #MHz. Shifts the ground (S) manifold up.
+
+class Li6_D2:
+    """Constants relating to lithium-6 and the D2 transition"""
+    #Hyperfine constants in units of MHz
+    Ap = -1.155
+    Bp = -0.10
+    IsotopeShift = 10534.26 #MHz
+
+class Li7_D1:
+    """Constants relating to lithium-7 and the D1 transition"""
+    #Hyperfine constants in units of MHz
+    Ap = 46.024
+    Bp = 0.0
+    IsotopeShift = 0 #MHz
+
+class Li7_D2:
+    """Constants relating to lithium-7 and the D2 transition"""
+    #Hyperfine constants in units of MHz
+    Ap = -3.055
+    Bp = -0.221
+    IsotopeShift = 0 #MHz
+
