@@ -31,7 +31,7 @@ setup(
     license='Apache License, Version 2.0',
     long_description=open('README.md').read(),
     install_requires=[
-        'wxPython >= 4.1.0',
+        # 'wxPython >= 4.1.0',
         'numpy',
         'scipy >= 0.12.0',
         'matplotlib >= 1.3.1',
