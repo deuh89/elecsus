@@ -103,9 +103,9 @@ class Li6:
 class Li7:
     """Constants relating to the lithium-7 atom"""
     I  = 1.5
-    As = 93.09552 #Ground state hyperfine constant in units of MHz
+    As = 401.75204335 #93.09552 #Ground state hyperfine constant in units of MHz
     gI = -0.001182213 #nuclear spin g-factor
-    mass = 7.01600343*amu
+    mass = 7.01600455*amu
     FS = 446.810184005e6 - 446.800132006e6 # Fine-structure splitting (MHz)
 
 # Element-Transition constants
