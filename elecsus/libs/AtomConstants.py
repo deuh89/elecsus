@@ -30,12 +30,12 @@ from numpy import pi, sqrt
 from FundamentalConstants import *
 
 class IdealAtom:
-	""" Constants for an ideal atom with no hyperfine structure, and only electron spin """
-	I = 0
-	As = 0
-	gI = 0
-	mass = 85*amu
-	
+    """ Constants for an ideal atom with no hyperfine structure, and only electron spin """
+    I = 0
+    As = 0
+    gI = 0
+    mass = 85*amu
+    
 class Rb85:
     """Constants relating to the rubidium-85 atom"""
     I  = 2.5         #Nuclear spin
@@ -75,7 +75,7 @@ class K40:
     gI = 0.000176490
     mass = 39.96399848*amu
     FS = 391016185.94 - 389286074.580 # Fine-structure splitting (MHz)
-	
+    
 class K41:
     """Constants relating to the potassium-41 atom"""
     I  = 1.5
@@ -83,7 +83,7 @@ class K41:
     gI = -0.00007790600
     mass = 40.96182576*amu
     FS = 391016185.94 - 389286074.580 # Fine-structure splitting (MHz)
-	
+    
 class Na:
     """Constants relating to the sodium-23 atom"""
     I  = 1.5
@@ -91,7 +91,7 @@ class Na:
     gI = -0.00080461080
     mass = 22.9897692807*amu
     FS = 508.8487162e6 - 508.3331958e6 # Fine-structure splitting (MHz)
-	
+    
 class Li6:
     """Constants relating to the lithium-6 atom"""
     I  = 1.0
@@ -190,7 +190,18 @@ class LiD2Transition:
     dipoleStrength=3.0*sqrt(e0*hbar*(2.0*NatGamma*(10.0**6))*(wavelength**3)/(8.0*pi))
     v0=384230426.6e6
 
-
+class LiD1D2Transition:
+    """Constants relating to combined Li atom"""
+    wavelength1=670.99247494e-9*0.0759+670.97665494e-9*0.9241 #The weighted linecentre of the lithium D1 line in m
+    wavelength2=670.97734875e-9*0.0759+670.96155981e-9*0.9241
+    wavevectorMagnitude1=2.0*pi/wavelength1 #Magnitude of the wavevector
+    wavevectorMagnitude2=2.0*pi/wavelength2 #Magnitude of the wavevector
+    NatGamma1=5.8724 #lithium D1 natural linewidth in MHz
+    NatGamma2=5.8724
+    dipoleStrength1=3.0*sqrt(e0*hbar*(2.0*NatGamma1*(10.0**6))*(wavelength1**3)/(8.0*pi))
+    dipoleStrength2=3.0*sqrt(e0*hbar*(2.0*NatGamma2*(10.0**6))*(wavelength2**3)/(8.0*pi))
+    v01=377107407.299e6 #The weighted linecentre of the rubidium D1 line in Hz
+    v02=384230426.6e6
 
 class IdealD1Transition:
     """Constants relating to the rubidium D1 transition"""
@@ -203,20 +214,22 @@ class IdealD1Transition:
 
 # transitions dictionary
 transitions = {'RbD1':RbD1Transition, 'RbD2':RbD2Transition,
-						'CsD1':CsD1Transition, 'CsD2':CsD2Transition,
-						'KD1':KD1Transition, 'KD2':KD2Transition,
-						'NaD1':NaD1Transition, 'NaD2':NaD2Transition,
-						'LiD1':LiD1Transition, 'LiD2':LiD2Transition,
-						'IdealD1':IdealD1Transition
-					}
-					
+                        'CsD1':CsD1Transition, 'CsD2':CsD2Transition,
+                        'KD1':KD1Transition, 'KD2':KD2Transition,
+                        'NaD1':NaD1Transition, 'NaD2':NaD2Transition,
+                        'LiD1':LiD1Transition, 'LiD2':LiD2Transition,
+                        'LiD1D2':LiD1D2Transition, 'IdealD1':IdealD1Transition
+                    }
+
+print(transitions)
+                    
 # Isotope-Transition constants
 
 class Ideal_D1:
-	Ap = 0
-	Bp = 0
-	IsotopeShift = 0
-	
+    Ap = 0
+    Bp = 0
+    IsotopeShift = 0
+    
 class Rb85_D1:
     """Constants relating to rubidium-85 and the D1 transition"""
     #Hyperfine constants in units of MHz
@@ -327,7 +340,7 @@ class Li6_D2:
     #Hyperfine constants in units of MHz
     Ap = -1.155
     Bp = -0.10
-    IsotopeShift = 10534.26 #MHz
+    IsotopeShift = 10514.01 #MHz
 
 class Li7_D1:
     """Constants relating to lithium-7 and the D1 transition"""
