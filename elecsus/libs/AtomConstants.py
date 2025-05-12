@@ -327,7 +327,7 @@ class Li6_D2:
     #Hyperfine constants in units of MHz
     Ap = -1.155
     Bp = -0.10
-    IsotopeShift = 10534.26 #MHz
+    IsotopeShift = 10514.01 #MHz
 
 class Li7_D1:
     """Constants relating to lithium-7 and the D1 transition"""
