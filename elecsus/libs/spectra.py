@@ -543,18 +543,24 @@ def calc_chi(X, p_dict,verbose=False):
             transitionConst = AC.LiD2Transition
         elif Dline=='D1D2':
             transitionConst = AC.LiD1D2Transition
-            print(transitionConst)
+        
+        if Dline=='D1D2':
+            AllEnergyLevels = concatenate((lenergy7D1,lenergy7D2,lenergy6D1,lenergy6D2,
+                                           renergy7D1,renergy7D2,renergy6D1,renergy6D2,
+                                           zenergy7D1,zenergy7D2,zenergy6D1,zenergy6D2))
+            print(zenergy6D1)
+            print(zenergy6D2)
 
-        if (Li6frac!=0.0) and (Li7frac!=0.0):
-            AllEnergyLevels = concatenate((lenergy7,lenergy6,
-                                                        renergy7,renergy6,
-                                                        zenergy7,zenergy6))
-        elif (Li6frac!=0.0) and (Li7frac==0.0):
-            AllEnergyLevels = concatenate((lenergy6,renergy6,zenergy6))
-        elif (Li6frac==0.0) and (Li7frac!=0.0):
-            AllEnergyLevels = concatenate((lenergy7,renergy7,zenergy7))
-
-
+        else:
+            if (Li6frac!=0.0) and (Li7frac!=0.0):
+                AllEnergyLevels = concatenate((lenergy7,lenergy6,
+                                                            renergy7,renergy6,
+                                                            zenergy7,zenergy6))
+            elif (Li6frac!=0.0) and (Li7frac==0.0):
+                AllEnergyLevels = concatenate((lenergy6,renergy6,zenergy6))
+            elif (Li6frac==0.0) and (Li7frac!=0.0):
+                AllEnergyLevels = concatenate((lenergy7,renergy7,zenergy7))
+    
     #Potassium energy levels <<<<< NEED TO ADD Z-COMPONENT >>>>>
     elif Elem=='K':
         K39frac=1.0-K40frac-K41frac #Potassium-39 fraction
@@ -650,6 +656,8 @@ def calc_chi(X, p_dict,verbose=False):
         NDensity=numDenNa(T)
     elif Elem=='Li':
         NDensity=numDenLi(T)
+    
+    ### !!! ctd. from here
 
     #Calculate lorentzian broadening and shifts
     gamma0 = 2.0*pi*transitionConst.NatGamma*1.e6
